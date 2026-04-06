@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up — Mushroom AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-sm-10 col-md-7 col-lg-5">
+      <div class="card-dark">
+        <div class="text-center mb-4">
+          <div style="font-size:3rem;">🍄</div>
+          <h2 class="page-title">Create Account</h2>
+          <p class="page-subtitle">Start with 3 free tokens — no card needed</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('register') }}" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="username">Username</label>
+            <input
+              type="text" class="form-control" id="username" name="username"
+              placeholder="Choose a username" minlength="3" required autocomplete="username"
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="email">Email Address</label>
+            <input
+              type="email" class="form-control" id="email" name="email"
+              placeholder="you@example.com" required autocomplete="email"
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="password">Password</label>
+            <input
+              type="password" class="form-control" id="password" name="password"
+              placeholder="Min. 6 characters" minlength="6" required autocomplete="new-password"
+            >
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label" for="confirm_password">Confirm Password</label>
+            <input
+              type="password" class="form-control" id="confirm_password" name="confirm_password"
+              placeholder="Repeat your password" required autocomplete="new-password"
+            >
+          </div>
+
+          <button type="submit" class="btn btn-accent w-100 py-2">
+            🪙 Create Account &amp; Get 3 Free Tokens
+          </button>
+        </form>
+
+        <hr style="border-color: var(--forest-mid); margin: 1.5rem 0;">
+
+        <p class="text-center mb-0" style="color: var(--text-muted); font-size:0.9rem;">
+          Already have an account?
+          <a href="{{ url_for('login') }}">Sign in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

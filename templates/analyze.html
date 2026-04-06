@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% block title %}Analyze Mushroom — Mushroom AI{% endblock %}
+
+{% block content %}
+
+<!-- Loading overlay -->
+<div class="spinner-overlay" id="loadingOverlay">
+  <div class="spinner-border text-success" style="width:3rem; height:3rem;" role="status"></div>
+  <p>Analyzing mushroom… this may take a few seconds</p>
+</div>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <!-- Page header -->
+      <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-2">
+        <div>
+          <h2 class="page-title">🔬 Mushroom Analyzer</h2>
+          <p class="page-subtitle mb-0">Upload a photo to identify the species</p>
+        </div>
+        <div class="token-badge" style="font-size:1rem; padding:6px 16px;">
+          🪙 {{ user['tokens'] }} token{{ 's' if user['tokens'] != 1 else '' }} left
+        </div>
+      </div>
+
+      {% if user['tokens'] < 1 %}
+        <!-- No tokens -->
+        <div class="no-token-box">
+          <div style="font-size:3rem;">🚫</div>
+          <h4 style="color:#ff6b5b; margin-top:0.75rem;">No Tokens Available</h4>
+          <p style="color: var(--text-muted);">
+            You need tokens to analyze mushrooms. Purchase more to continue.
+          </p>
+          <a href="{{ url_for('account') }}" class="btn btn-forest">← Go to Account</a>
+        </div>
+
+      {% else %}
+        <!-- Upload form -->
+        <div class="card-dark mb-4">
+          <form method="POST" action="{{ url_for('analyze') }}" enctype="multipart/form-data" id="analyzeForm">
+            <div class="upload-area mb-3" id="uploadArea" onclick="document.getElementById('photo').click()">
+              <div class="upload-icon">📷</div>
+              <p><strong>Click to upload</strong> or drag &amp; drop</p>
+              <p style="font-size:0.85rem;">JPG, PNG, WebP — max 16 MB</p>
+            </div>
+
+            <input
+              type="file" id="photo" name="photo" accept=".jpg,.jpeg,.png,.webp"
+              class="d-none" required
+            >
+
+            <!-- Preview -->
+            <div class="text-center mb-3">
+              <img id="image-preview" src="#" alt="Preview">
+              <p id="filename-label" class="mt-2" style="color: var(--text-muted); font-size:0.85rem; display:none;"></p>
+            </div>
+
+            <div style="background: rgba(200,169,81,0.08); border:1px solid rgba(200,169,81,0.25); border-radius:8px; padding:0.75rem 1rem; margin-bottom:1rem; font-size:0.85rem; color: var(--accent-warm);">
+              ⚠️ 1 token will be deducted from your balance when you submit.
+            </div>
+
+            <button type="submit" class="btn btn-accent w-100 py-2" id="submitBtn" disabled>
+              🔬 Analyze Mushroom (1 token)
+            </button>
+          </form>
+        </div>
+      {% endif %}
+
+      <!-- Result -->
+      {% if result %}
+      <div class="result-card">
+        <h2>🍄 Analysis Result</h2>
+        {% if image_filename %}
+        <div class="text-center mb-3">
+          <img
+            src="{{ url_for('uploaded_file', filename=image_filename) }}"
+            alt="Analyzed mushroom"
+            style="max-height:220px; object-fit:contain; border-radius:10px; border:1px solid var(--forest-mid);"
+          >
+        </div>
+        {% endif %}
+        <div class="result-text">{{ result }}</div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const photoInput   = document.getElementById('photo');
+  const preview      = document.getElementById('image-preview');
+  const filenameLabel = document.getElementById('filename-label');
+  const submitBtn    = document.getElementById('submitBtn');
+  const uploadArea   = document.getElementById('uploadArea');
+  const analyzeForm  = document.getElementById('analyzeForm');
+  const overlay      = document.getElementById('loadingOverlay');
+
+  if (photoInput) {
+    photoInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const url = URL.createObjectURL(file);
+      preview.src = url;
+      preview.style.display = 'block';
+      filenameLabel.textContent = file.name;
+      filenameLabel.style.display = 'block';
+      submitBtn.disabled = false;
+    });
+  }
+
+  // Drag & drop
+  if (uploadArea) {
+    ['dragenter','dragover'].forEach(evt =>
+      uploadArea.addEventListener(evt, e => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      })
+    );
+
+    ['dragleave','drop'].forEach(evt =>
+      uploadArea.addEventListener(evt, e => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+      })
+    );
+
+    uploadArea.addEventListener('drop', e => {
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      photoInput.files = dt.files;
+      photoInput.dispatchEvent(new Event('change'));
+    });
+  }
+
+  // Show spinner on submit
+  if (analyzeForm) {
+    analyzeForm.addEventListener('submit', function () {
+      if (overlay) overlay.classList.add('active');
+    });
+  }
+</script>
+{% endblock %}

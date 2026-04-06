@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}My Account — Mushroom AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row g-4">
+
+    <!-- Left column: profile + tokens -->
+    <div class="col-lg-4">
+      <!-- Profile card -->
+      <div class="card-dark mb-4">
+        <div class="text-center mb-3">
+          <div style="font-size:3.5rem; margin-bottom:0.5rem;">👤</div>
+          <h4 style="color: var(--text-main); margin:0;">{{ user['username'] }}</h4>
+          <p style="color: var(--text-muted); font-size:0.85rem; margin:0;">{{ user['email'] }}</p>
+        </div>
+        <hr style="border-color: var(--forest-mid);">
+        <p style="color: var(--text-muted); font-size:0.8rem; text-align:center; margin:0;">
+          Member since {{ user['created_at'][:10] }}
+        </p>
+      </div>
+
+      <!-- Token balance -->
+      <div class="token-display mb-4">
+        <div class="token-count">{{ user['tokens'] }}</div>
+        <div class="token-label mt-1">Token{{ 's' if user['tokens'] != 1 else '' }} Remaining</div>
+        <p style="color: var(--text-muted); font-size:0.85rem; margin-top:0.75rem; margin-bottom:0;">
+          1 token = 1 mushroom analysis
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="text-center">
+        <a href="{{ url_for('analyze') }}" class="btn btn-accent w-100 py-2">
+          🔬 Analyze a Mushroom
+        </a>
+      </div>
+
+      {% if user['tokens'] == 0 %}
+      <div class="no-token-box mt-3">
+        <p style="color: #ff6b5b; font-size:0.9rem; margin:0;">
+          🚫 You're out of tokens.<br>
+          <span style="color: var(--text-muted);">Purchase more to continue analyzing.</span>
+        </p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Right column: analysis history -->
+    <div class="col-lg-8">
+      <div class="card-dark">
+        <h4 style="color: var(--accent); margin-bottom:1.25rem;">📋 Recent Analyses</h4>
+
+        {% if analyses %}
+          {% for a in analyses %}
+          <div class="analysis-item">
+            <div class="d-flex align-items-start gap-3">
+              <img
+                src="{{ url_for('uploaded_file', filename=a['image_filename']) }}"
+                alt="Mushroom" class="analysis-thumb"
+              >
+              <div style="flex:1; min-width:0;">
+                <div class="d-flex justify-content-between align-items-start">
+                  <span style="color: var(--text-main); font-weight:600; font-size:0.95rem;">
+                    Analysis #{{ loop.index }}
+                  </span>
+                  <span class="date">{{ a['created_at'][:16].replace('T', ' ') }}</span>
+                </div>
+                <div class="analysis-preview">{{ a['result'] }}</div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="text-center py-4" style="color: var(--text-muted);">
+            <div style="font-size:3rem; margin-bottom:1rem;">🔍</div>
+            <p>No analyses yet. Upload a mushroom photo to get started!</p>
+            <a href="{{ url_for('analyze') }}" class="btn btn-forest">Go to Analyzer</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

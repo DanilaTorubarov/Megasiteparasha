@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}Mushroom AI — Identify Mushrooms with AI{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-icon">🍄</div>
+    <h1>Identify Mushrooms<br>with AI</h1>
+    <p>
+      Upload a photo of any mushroom and get instant AI-powered identification,
+      edibility assessment, and safety information from our expert mycology model.
+    </p>
+    {% if user %}
+      <a href="{{ url_for('analyze') }}" class="btn btn-accent btn-lg px-5">
+        🔬 Analyze a Mushroom
+      </a>
+    {% else %}
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="{{ url_for('register') }}" class="btn btn-accent btn-lg px-5">
+          Get Started Free
+        </a>
+        <a href="{{ url_for('login') }}" class="btn btn-forest btn-lg px-5">
+          Sign In
+        </a>
+      </div>
+      <p class="mt-3" style="color: var(--text-muted); font-size:0.9rem;">
+        🪙 New accounts receive 3 free tokens — no credit card required
+      </p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Features -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h5>AI-Powered Analysis</h5>
+          <p>Powered by Claude Opus — one of the most capable vision AI models available.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h5>Instant Results</h5>
+          <p>Get detailed mushroom identification with edibility and safety information in seconds.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h5>Safe & Secure</h5>
+          <p>Your photos and analyses are private. We keep your data secure and confidential.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="py-4 pb-5">
+  <div class="container">
+    <div class="card-dark">
+      <h3 class="text-center mb-4">How It Works</h3>
+      <div class="row g-3 text-center">
+        <div class="col-md-4">
+          <div style="font-size:2rem;">📸</div>
+          <h6 style="color: var(--text-main); margin-top:0.5rem;">1. Upload a Photo</h6>
+          <p style="color: var(--text-muted); font-size:0.9rem;">Take a clear photo of the mushroom you want to identify.</p>
+        </div>
+        <div class="col-md-4">
+          <div style="font-size:2rem;">🤖</div>
+          <h6 style="color: var(--text-main); margin-top:0.5rem;">2. AI Analysis</h6>
+          <p style="color: var(--text-muted); font-size:0.9rem;">Our AI analyzes the visual features and identifies the species.</p>
+        </div>
+        <div class="col-md-4">
+          <div style="font-size:2rem;">📋</div>
+          <h6 style="color: var(--text-main); margin-top:0.5rem;">3. Get Results</h6>
+          <p style="color: var(--text-muted); font-size:0.9rem;">Receive identification, edibility status, and safety warnings.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Disclaimer -->
+<section class="pb-5">
+  <div class="container">
+    <div style="background: rgba(200,169,81,0.08); border: 1px solid rgba(200,169,81,0.3); border-radius:12px; padding:1.25rem 1.5rem;">
+      <p class="mb-0" style="color: var(--accent-warm); font-size:0.9rem;">
+        ⚠️ <strong>Important:</strong> This tool is for educational purposes only.
+        Never consume a wild mushroom based solely on AI identification.
+        Always consult a qualified mycologist before eating any wild mushroom.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}
