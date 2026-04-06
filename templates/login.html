@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Login — Mushroom AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-sm-10 col-md-7 col-lg-5">
+      <div class="card-dark">
+        <div class="text-center mb-4">
+          <div style="font-size:3rem;">🍄</div>
+          <h2 class="page-title">Welcome Back</h2>
+          <p class="page-subtitle">Sign in to your account</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('login') }}" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="username">Username</label>
+            <input
+              type="text" class="form-control" id="username" name="username"
+              placeholder="Your username" required autocomplete="username"
+            >
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label" for="password">Password</label>
+            <input
+              type="password" class="form-control" id="password" name="password"
+              placeholder="Your password" required autocomplete="current-password"
+            >
+          </div>
+
+          <button type="submit" class="btn btn-accent w-100 py-2">
+            Sign In
+          </button>
+        </form>
+
+        <hr style="border-color: var(--forest-mid); margin: 1.5rem 0;">
+
+        <p class="text-center mb-0" style="color: var(--text-muted); font-size:0.9rem;">
+          Don't have an account?
+          <a href="{{ url_for('register') }}">Sign up free</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
